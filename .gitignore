@@ -1,0 +1,28 @@
+# Python
+**/backend/venv/
+**/backend/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Node
+**/frontend/node_modules/
+**/frontend/dist/
+**/frontend/dist-ssr/
+
+# Environment Variables (Sensitive)
+.env
+.env.*
+!.env.example
+**/backend/.env
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+Thumbs.db
