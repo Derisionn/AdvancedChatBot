@@ -1,6 +1,9 @@
 langgraph
 langchain
 langchain-community
+langchain-core
+langchain-google-genai
+langchain-huggingface
 huggingface_hub
 fastapi
 uvicorn
