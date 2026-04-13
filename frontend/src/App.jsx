@@ -41,8 +41,13 @@ function App() {
         session_id: sessionId
       });
 
+      const rawResponse = response.data.response;
+      const botText = typeof rawResponse === 'string' 
+        ? rawResponse 
+        : (rawResponse?.text || JSON.stringify(rawResponse));
+
       const botMessage = {
-        text: response.data.response,
+        text: botText,
         sender: 'bot',
         id: Date.now() + 1
       };
@@ -107,7 +112,7 @@ function App() {
               className={`message-wrapper ${m.sender}`}
             >
               <div className={`message-bubble ${m.sender}`}>
-                {m.text}
+                {typeof m.text === 'string' ? m.text : (m.text?.text || JSON.stringify(m.text))}
               </div>
             </motion.div>
           ))}

@@ -54,7 +54,15 @@ def chatbot_node(state):
 
         # Use model.invoke with the string directly
         response = model.invoke(prompt)
-        bot_reply = response.content
+        
+        # Ensure bot_reply is a string
+        if isinstance(response.content, str):
+            bot_reply = response.content
+        elif isinstance(response.content, list):
+            # Handle cases where content is a list of parts (e.g. Gemini multi-modal)
+            bot_reply = "".join([part.get("text", "") if isinstance(part, dict) else str(part) for part in response.content])
+        else:
+            bot_reply = str(response.content)
 
         # Add bot reply to history
         history.append(f"Bot: {bot_reply}")
