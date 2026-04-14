@@ -95,7 +95,17 @@ def chat(request: ChatRequest):
     else:
         session_id = request.session_id
 
-    history = sessions.get(session_id, [])
+    session_data  = sessions.get(session_id)
+
+    if not session_data:
+        # First message → create new session
+        session_data = {
+            "title": request.message[:30],  # first message as title
+            "history": []
+        }
+
+    history = session_data["history"]
+    
 
     state = {
         "input": request.message,
@@ -103,9 +113,38 @@ def chat(request: ChatRequest):
     }
 
     result = app.invoke(state)
-    sessions[session_id] = result["history"]
+    session_data["history"] = result["history"]
+    sessions[session_id] = session_data
 
     return {
         "response": result["output"],
         "session_id": session_id   # 👈 IMPORTANT
     }
+
+
+
+@app_api.get("/sessions")
+def get_sessions():
+    return [
+        {
+            "session_id": sid,
+            "title": data["title"]
+        }
+        for sid, data in sessions.items()
+    ]
+
+@app_api.get("/sessions/{session_id}")
+def get_session(session_id: str):
+    session = sessions.get(session_id)
+
+    if not session:
+        return {"error": "Session not found"}
+
+    return session
+
+@app_api.delete("/sessions/{session_id}")
+def delete_session(session_id: str):
+    if session_id in sessions:
+        del sessions[session_id]
+        return {"message": "Deleted"}
+    return {"error": "Not found"}
