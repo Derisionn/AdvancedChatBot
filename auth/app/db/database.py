@@ -10,9 +10,13 @@ DATABASE_URL = os.getenv("DATABASE_URL")
 if not DATABASE_URL:
     raise ValueError("DATABASE_URL is not set in environment variables")
 
+# SQLAlchemy 1.4+ requires postgresql:// instead of postgres://
+if DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
+
 engine = create_engine(
     DATABASE_URL,
-    connect_args={"sslmode": "require"} if DATABASE_URL.startswith("postgresql") else {}
+    connect_args={"sslmode": "require"} if "postgresql" in DATABASE_URL else {}
 )
 
 SessionLocal = sessionmaker(bind=engine)

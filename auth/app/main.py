@@ -4,7 +4,13 @@ from app.routes.auth import router
 from app.db.database import engine, Base
 
 # Create tables
-Base.metadata.create_all(bind=engine)
+try:
+    Base.metadata.create_all(bind=engine)
+    print("Database tables verified/created.")
+except Exception as e:
+    print(f"DATABASE ERROR ON STARTUP: {str(e)}")
+    import traceback
+    traceback.print_exc()
 
 app = FastAPI()
 
