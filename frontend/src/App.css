@@ -94,7 +94,53 @@ body {
 .auth-header {
   text-align: center;
   margin-bottom: 2.5rem;
+  position: relative;
 }
+
+.back-btn-header {
+  position: absolute;
+  left: 0;
+  top: 0;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 50%;
+  transition: all 0.2s;
+}
+
+.back-btn-header:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-main);
+}
+
+.step-indicator {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+}
+
+.step-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--glass-border);
+  transition: all 0.3s;
+}
+
+.step-dot.active {
+  background: var(--primary);
+  box-shadow: 0 0 10px var(--primary-glow);
+  width: 20px;
+  border-radius: 4px;
+}
+
+.step-dot.completed {
+  background: var(--success);
+}
+
 
 .logo-section {
   display: flex;

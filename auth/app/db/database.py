@@ -7,9 +7,12 @@ load_dotenv()
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 
+if not DATABASE_URL:
+    raise ValueError("DATABASE_URL is not set in environment variables")
+
 engine = create_engine(
     DATABASE_URL,
-    connect_args={"sslmode": "require"}  # required for Supabase
+    connect_args={"sslmode": "require"} if DATABASE_URL.startswith("postgresql") else {}
 )
 
 SessionLocal = sessionmaker(bind=engine)

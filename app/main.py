@@ -17,7 +17,7 @@ sessions = {}
 # Add CORS middleware
 app_api.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # In production, replace with your frontend URL
+    allow_origins=["https://advanced-chat-bot-weld.vercel.app"], # In production, replace with your frontend URL
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

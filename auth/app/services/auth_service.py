@@ -22,6 +22,7 @@ def register_user(db: Session, user_data: UserCreate):
     db.refresh(new_user)
     return new_user
 
+
 def login_user(db: Session, email: str, password: str):
     # 🔍 Find user
     user = db.query(User).filter(User.email == email).first()
