@@ -153,3 +153,6 @@ def delete_session(session_id: str):
         del sessions[session_id]
         return {"message": "Deleted"}
     return {"error": "Not found"}
+
+# Alias for Render compatibility
+app_api = app
