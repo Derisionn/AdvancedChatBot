@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const AUTH_URL = import.meta.env.VITE_AUTH_API_URL || 'http://localhost:8001';
-const CHAT_URL = import.meta.env.VITE_CHAT_API_URL || 'http://localhost:8000';
+const AUTH_URL = import.meta.env.VITE_AUTH_API_URL;
+const CHAT_URL = import.meta.env.VITE_CHAT_API_URL;
 
 const authApi = axios.create({
   baseURL: AUTH_URL,
@@ -24,7 +24,7 @@ chatApi.interceptors.request.use((config) => {
 const handleAuthError = (error) => {
   // Only auto-reload if it's NOT a login or signup attempt
   const isAuthAttempt = error.config.url.includes('/auth/login') || error.config.url.includes('/auth/signup');
-  
+
   if (error.response && error.response.status === 401 && !isAuthAttempt) {
     localStorage.removeItem('token');
     window.location.reload();
