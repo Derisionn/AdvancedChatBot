@@ -1,6 +1,4 @@
 import os
-from langchain_huggingface import ChatHuggingFace, HuggingFaceEndpoint
-from langchain_core.messages import HumanMessage
 from dotenv import load_dotenv
 from typing import TypedDict,List,Optional
 from langgraph.graph import StateGraph, END
@@ -29,7 +27,8 @@ app.add_middleware(
 )
 
 # Load env
-load_dotenv()
+basedir = os.path.abspath(os.path.dirname(__file__))
+load_dotenv(os.path.join(basedir, ".env"))
 
 # Initialize Gemini
 model = ChatGoogleGenerativeAI(
