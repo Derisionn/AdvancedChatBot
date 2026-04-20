@@ -11,13 +11,18 @@ from fastapi.middleware.cors import CORSMiddleware
 
 import uuid
 
-app_api = FastAPI()
+app = FastAPI()
 sessions = {}
 
 # Add CORS middleware
-app_api.add_middleware(
+app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://advanced-chat-bot-weld.vercel.app"], # In production, replace with your frontend URL
+    allow_origins=[
+        "https://advanced-chat-bot-weld.vercel.app",
+        "http://localhost:5173",
+        "http://localhost:3000",
+        "http://127.0.0.1:5173",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -80,13 +85,13 @@ graph.set_entry_point("chatbot")
 graph.add_edge("chatbot", END)
 
 # Compile
-app = graph.compile()
+chat_workflow = graph.compile()
 
 class ChatRequest(BaseModel):
     message: str
     session_id: Optional[str] = None
 
-@app_api.post("/chat")
+@app.post("/chat")
 def chat(request: ChatRequest):
 
     # Generate session_id if not provided
@@ -112,7 +117,7 @@ def chat(request: ChatRequest):
         "history": history
     }
 
-    result = app.invoke(state)
+    result = chat_workflow.invoke(state)
     session_data["history"] = result["history"]
     sessions[session_id] = session_data
 
@@ -123,7 +128,7 @@ def chat(request: ChatRequest):
 
 
 
-@app_api.get("/sessions")
+@app.get("/sessions")
 def get_sessions():
     return [
         {
@@ -133,7 +138,7 @@ def get_sessions():
         for sid, data in sessions.items()
     ]
 
-@app_api.get("/sessions/{session_id}")
+@app.get("/sessions/{session_id}")
 def get_session(session_id: str):
     session = sessions.get(session_id)
 
@@ -142,7 +147,7 @@ def get_session(session_id: str):
 
     return session
 
-@app_api.delete("/sessions/{session_id}")
+@app.delete("/sessions/{session_id}")
 def delete_session(session_id: str):
     if session_id in sessions:
         del sessions[session_id]
